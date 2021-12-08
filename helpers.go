@@ -46,7 +46,7 @@ func getHostIP() {
 func getBoardcastAddr() {
 	addrInts := strings.Split(hostIP, ".")
 	addrInts[3] = "255"
-	boardcastIP = strings.Join(addrInts, ".")
+	broadcastIP = strings.Join(addrInts, ".")
 }
 
 func enumerate3Chars() []string {
@@ -70,24 +70,12 @@ func enumerate3Chars() []string {
 	return result
 }
 
-func boardcastHost() {
-	for {
-		req := NewServerReq{Addr: hostIP}
-		buf, err := json.Marshal(&req)
-		if err != nil {
-			panic(err)
-		}
-		reader := bytes.NewReader(buf)
-		http.Post("http://"+boardcastIP+PORT+"/mapTask", "application/json", reader)
-		time.Sleep(time.Second)
-	}
-}
-
 func startServerTimer(server string, task MapTaskReq) {
 	time.Sleep(5 * time.Second)
 	serverTasksMutex.Lock()
 	if serverTasks[server] == task {
-		availability[server] = false
+		log.Printf("Server %v timeout", server)
+		delete(availability, server)
 		mapTasksMutex.Lock()
 		mapTasks = append([]MapTaskReq{task}, mapTasks...)
 		mapTasksMutex.Unlock()
@@ -109,7 +97,7 @@ func dispatchMapTasks() {
 		for len(mapTasks) != 0 {
 			t := mapTasks[0]
 			mapTasks = mapTasks[1:]
-			if _, ok := crackTasks[t.UUID]; ok {
+			if result, ok := crackTasks[t.UUID]; ok && result == "" {
 				buf, err := json.Marshal(&t)
 				if err != nil {
 					log.Fatalf("%v", err)

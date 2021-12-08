@@ -3,33 +3,44 @@ package main
 import (
 	"log"
 	"sync"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
-const INTERFACE_NAME = "eth0"
+const INTERFACE_NAME = "eth1"
 const PORT = ":8080"
 
 var availability map[string]bool = make(map[string]bool)
 var hostIP string
-var boardcastIP string
 
 var crackTasks map[string]string = make(map[string]string)
 
 var mapTasksMutex sync.Mutex
-var mapTasks []MapTaskReq = make([]MapTaskReq, 50)
+var mapTasks []MapTaskReq = make([]MapTaskReq, 0, 50)
 
 var serverTasksMutex sync.Mutex
 var serverTasks map[string]MapTaskReq = make(map[string]MapTaskReq)
 
 var enumerated3CharsList []string = make([]string, 0, 157464)
 
+var taskTimeMutex sync.Mutex
+var avgLatency = 0.
+var numTaskDone = 0.
+var taskStartingTime map[string]time.Time = make(map[string]time.Time)
+
+var startTime time.Time
+var avgThrouput = 0.
+
 func main() {
 	getHostIP()
 	getBoardcastAddr()
 
 	log.Printf("%v", availability)
-	log.Printf("%v", boardcastIP)
+	log.Printf("%v", broadcastIP)
+
+	go receiveBroadcast()
+	go broadcastHost()
 
 	enumerated3CharsList = enumerate3Chars()
 
@@ -40,7 +51,7 @@ func main() {
 	router.POST("/taskResult", handleTaskResult)
 	router.POST("/crackTask", handleCrackTask)
 
-	router.Run(":8080")
+	startTime = time.Now()
 
-	go boardcastHost()
+	router.Run(":8080")
 }

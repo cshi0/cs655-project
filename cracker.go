@@ -70,5 +70,5 @@ func crackPassword(prefix string, toUnhash string, masterAddr string, uuid strin
 		return
 	}
 	reader := bytes.NewReader(buf)
-	http.Post("http://"+boardcastIP+PORT+"/mapTask", "application/json", reader)
+	http.Post("http://"+masterAddr+PORT+"/taskResult", "application/json", reader)
 }
