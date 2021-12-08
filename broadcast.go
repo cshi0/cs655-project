@@ -31,6 +31,7 @@ func scanServer() {
 			ipStr := strings.Join(startAddr, ".")
 			http.Post("http://"+ipStr+PORT+"/newServer", "application/json", reader)
 		}
+		time.Sleep(5 * time.Second)
 	}
 }
 
