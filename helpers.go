@@ -89,10 +89,11 @@ func enumerate3Chars() []string {
 }
 
 func startServerTimer(server string, task MapTaskReq) {
-	time.Sleep(5 * time.Second)
+	time.Sleep(30 * time.Second)
 	serverTasksMutex.Lock()
 	if reflect.DeepEqual(serverTasks[server], task) {
 		log.Printf("Server %v timeout, %+v, %+v", server, serverTasks[server], task)
+		log.Printf("tasks: %+v", mapTasks)
 		delete(availability, server)
 		mapTasksMutex.Lock()
 		mapTasks = append([]MapTaskReq{task}, mapTasks...)
