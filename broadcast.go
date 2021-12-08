@@ -29,7 +29,10 @@ func scanServer() {
 				log.Printf("%v", err)
 			}
 			reader := bytes.NewReader(buf)
-			http.Post("http://"+ipStr+PORT+"/newServer", "application/json", reader)
+			_, err = http.Post("http://"+ipStr+PORT+"/newServer", "application/json", reader)
+			if err != nil {
+				log.Printf("%v", err)
+			}
 			time.Sleep(5 * time.Second)
 		}()
 	}
