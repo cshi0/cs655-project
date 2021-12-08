@@ -3,9 +3,11 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -17,6 +19,7 @@ func getHostIP() {
 	}
 
 	var ip net.IP
+	var mask net.IPMask
 	for _, i := range ifaces {
 
 		if i.Name == INTERFACE_NAME {
@@ -29,13 +32,16 @@ func getHostIP() {
 				switch v := addr.(type) {
 				case *net.IPNet:
 					ip = v.IP
+					mask = v.Mask
 				case *net.IPAddr:
 					ip = v.IP
+					mask = v.IP.DefaultMask()
 				}
 
 				if strings.Contains(ip.String(), ".") { // if ipv4
 					availability[ip.String()] = true
 					hostIP = ip.String()
+					hostMask = fmt.Sprintf("%v.%v.%v.%v", mask[0], mask[1], mask[2], mask[3])
 				}
 
 			}
@@ -43,9 +49,20 @@ func getHostIP() {
 	}
 }
 
-func getBoardcastAddr() {
+func getBroadcastAddr() {
 	addrInts := strings.Split(hostIP, ".")
-	addrInts[3] = "255"
+	maskInts := strings.Split(hostMask, ".")
+	for i, _ := range addrInts {
+		addrInt, err := strconv.Atoi(addrInts[i])
+		if err != nil {
+			panic(err)
+		}
+		maskInt, err := strconv.Atoi(maskInts[i])
+		if err != nil {
+			panic(err)
+		}
+		addrInts[i] = fmt.Sprintf("%v", uint8(addrInt|(^maskInt)))
+	}
 	broadcastIP = strings.Join(addrInts, ".")
 }
 

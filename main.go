@@ -8,11 +8,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const INTERFACE_NAME = "eth1"
+const INTERFACE_NAME = "eth0"
 const PORT = ":8080"
 
 var availability map[string]bool = make(map[string]bool)
 var hostIP string
+var hostMask string
 
 var crackTasks map[string]string = make(map[string]string)
 
@@ -34,7 +35,7 @@ var avgThrouput = 0.
 
 func main() {
 	getHostIP()
-	getBoardcastAddr()
+	getBroadcastAddr()
 
 	log.Printf("%v", availability)
 	log.Printf("%v", broadcastIP)
