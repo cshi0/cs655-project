@@ -50,6 +50,7 @@ type TaskResultReq struct {
 	ToUnhash string
 	Result   string
 	Success  bool
+	Prefix   string
 }
 
 func handleTaskResult(c *gin.Context) {

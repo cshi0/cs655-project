@@ -61,9 +61,9 @@ func crackPassword(prefix string, toUnhash string, masterAddr string, uuid strin
 
 	wg.Wait()
 
-	log.Printf("RESULT: %v, %v, %v", masterAddr, toUnhash, result)
+	log.Printf("RESULT for %v: %v, %v, %v", prefix, masterAddr, toUnhash, result)
 
-	req := TaskResultReq{IP: hostIP, UUID: uuid, ToUnhash: toUnhash, Result: result, Success: result != ""}
+	req := TaskResultReq{IP: hostIP, UUID: uuid, ToUnhash: toUnhash, Result: result, Success: result != "", Prefix: prefix}
 	buf, err := json.Marshal(&req)
 	if err != nil {
 		log.Printf("%v", err)
