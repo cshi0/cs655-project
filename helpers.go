@@ -7,6 +7,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -90,7 +91,7 @@ func enumerate3Chars() []string {
 func startServerTimer(server string, task MapTaskReq) {
 	time.Sleep(5 * time.Second)
 	serverTasksMutex.Lock()
-	if serverTasks[server] == task {
+	if reflect.DeepEqual(serverTasks[server], task) {
 		log.Printf("Server %v timeout", server)
 		delete(availability, server)
 		mapTasksMutex.Lock()
