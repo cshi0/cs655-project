@@ -92,7 +92,7 @@ func startServerTimer(server string, task MapTaskReq) {
 	time.Sleep(5 * time.Second)
 	serverTasksMutex.Lock()
 	if reflect.DeepEqual(serverTasks[server], task) {
-		log.Printf("Server %v timeout", server)
+		log.Printf("Server %v timeout, %+v, %+v", server, serverTasks[server], task)
 		delete(availability, server)
 		mapTasksMutex.Lock()
 		mapTasks = append([]MapTaskReq{task}, mapTasks...)
