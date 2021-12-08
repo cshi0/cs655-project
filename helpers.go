@@ -117,7 +117,7 @@ func dispatchMapTasks() {
 			if result, ok := crackTasks[t.UUID]; ok && result == "" {
 				buf, err := json.Marshal(&t)
 				if err != nil {
-					log.Fatalf("%v", err)
+					log.Printf("%v", err)
 					continue
 				}
 				reader := bytes.NewReader(buf)

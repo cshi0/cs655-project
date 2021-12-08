@@ -88,7 +88,7 @@ func handleCrackTask(c *gin.Context) {
 
 	uuid, err := uuid.NewV4()
 	if err != nil {
-		log.Fatalf("%v", err)
+		log.Printf("%v", err)
 		c.Status(http.StatusInternalServerError)
 		return
 	}

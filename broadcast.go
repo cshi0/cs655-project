@@ -21,7 +21,7 @@ var broadcastIP string
 func scanServer() {
 	buf, err := json.Marshal(&NewServerReq{Addr: hostIP})
 	if err != nil {
-		log.Fatalf("%v", err)
+		log.Printf("%v", err)
 	}
 	reader := bytes.NewReader(buf)
 	for {
@@ -31,7 +31,7 @@ func scanServer() {
 			ipStr := strings.Join(startAddr, ".")
 			_, err := http.Post("http://"+ipStr+PORT+"/newServer", "application/json", reader)
 			if err != nil {
-				log.Fatalf("%v", err)
+				log.Printf("%v", err)
 			}
 		}
 		time.Sleep(5 * time.Second)

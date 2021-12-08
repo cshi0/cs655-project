@@ -66,7 +66,7 @@ func crackPassword(prefix string, toUnhash string, masterAddr string, uuid strin
 	req := TaskResultReq{IP: hostIP, UUID: uuid, ToUnhash: toUnhash, Result: result, Success: result != ""}
 	buf, err := json.Marshal(&req)
 	if err != nil {
-		log.Fatalf("%v", err)
+		log.Printf("%v", err)
 		return
 	}
 	reader := bytes.NewReader(buf)
