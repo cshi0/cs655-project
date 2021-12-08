@@ -19,22 +19,19 @@ const MAX_SERVER_NUM = 100
 var broadcastIP string
 
 func scanServer() {
-	buf, err := json.Marshal(&NewServerReq{Addr: hostIP})
-	if err != nil {
-		log.Printf("%v", err)
-	}
-	reader := bytes.NewReader(buf)
-	for {
-		startAddr := []string{"10", "10", "0", "1"}
-		for i := 1; i <= MAX_SERVER_NUM; i++ {
-			startAddr[2] = strconv.Itoa(i)
-			ipStr := strings.Join(startAddr, ".")
-			_, err := http.Post("http://"+ipStr+PORT+"/newServer", "application/json", reader)
+	startAddr := []string{"10", "10", "0", "1"}
+	for i := 1; i <= MAX_SERVER_NUM; i++ {
+		startAddr[2] = strconv.Itoa(i)
+		ipStr := strings.Join(startAddr, ".")
+		go func() {
+			buf, err := json.Marshal(&NewServerReq{Addr: hostIP})
 			if err != nil {
 				log.Printf("%v", err)
 			}
-		}
-		time.Sleep(5 * time.Second)
+			reader := bytes.NewReader(buf)
+			http.Post("http://"+ipStr+PORT+"/newServer", "application/json", reader)
+			time.Sleep(5 * time.Second)
+		}()
 	}
 }
 
