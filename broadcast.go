@@ -24,16 +24,18 @@ func scanServer() {
 		startAddr[2] = strconv.Itoa(i)
 		ipStr := strings.Join(startAddr, ".")
 		go func() {
-			buf, err := json.Marshal(&NewServerReq{Addr: hostIP})
-			if err != nil {
-				log.Printf("%v", err)
+			for {
+				buf, err := json.Marshal(&NewServerReq{Addr: hostIP})
+				if err != nil {
+					log.Printf("%v", err)
+				}
+				reader := bytes.NewReader(buf)
+				_, err = http.Post("http://"+ipStr+PORT+"/newServer", "application/json", reader)
+				if err != nil && strings.Contains(err.Error(), "timeout") {
+					log.Printf("%v", err)
+				}
+				time.Sleep(5 * time.Second)
 			}
-			reader := bytes.NewReader(buf)
-			_, err = http.Post("http://"+ipStr+PORT+"/newServer", "application/json", reader)
-			if err != nil {
-				log.Printf("%v", err)
-			}
-			time.Sleep(5 * time.Second)
 		}()
 	}
 }
