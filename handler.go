@@ -114,3 +114,25 @@ func handleCrackTask(c *gin.Context) {
 		"UUID": uuid.String(),
 	})
 }
+
+func handleMetrics(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"average latency":    avgLatency,
+		"average throughput": avgThrouput,
+	})
+}
+
+type FetchResultReq struct {
+	UUID string
+}
+
+func handleFetchResult(c *gin.Context) {
+	req := new(FetchResultReq)
+	c.BindJSON(req)
+	log.Printf("Received fetch result: %+v", req)
+
+	c.JSON(http.StatusOK, gin.H{
+		"uuid":   req.UUID,
+		"result": crackTasks[req.UUID],
+	})
+}

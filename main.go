@@ -49,6 +49,8 @@ func main() {
 	router.POST("/mapTask", handleMapTask)
 	router.POST("/taskResult", handleTaskResult)
 	router.POST("/crackTask", handleCrackTask)
+	router.GET("/metrics", handleMetrics)
+	router.GET("/fetchResult", handleFetchResult)
 
 	startTime = time.Now()
 
