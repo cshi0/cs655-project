@@ -22,7 +22,7 @@ func broadcastHost() {
 	}
 	defer pc.Close()
 
-	startAddr := []string{"10", "10", "0", "1"}
+	startAddr := []string{"10", "10", "0", "255"}
 	broadcastAddrs := make([]*net.UDPAddr, 0, MAX_SERVER_NUM)
 
 	for i := 1; i <= MAX_SERVER_NUM; i++ {
