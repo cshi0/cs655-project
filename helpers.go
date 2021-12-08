@@ -98,6 +98,8 @@ func startServerTimer(server string, task MapTaskReq) {
 		mapTasksMutex.Unlock()
 	}
 	serverTasksMutex.Unlock()
+
+	dispatchMapTasks()
 }
 
 func dispatchMapTasks() {
