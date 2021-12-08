@@ -18,7 +18,9 @@ type NewServerReq struct {
 func handleNewServer(c *gin.Context) {
 	req := new(NewServerReq)
 	c.BindJSON(req)
-	availability[req.Addr] = true
+	if _, ok := availability[req.Addr]; !ok {
+		availability[req.Addr] = true
+	}
 	log.Printf("%v", availability)
 	c.Status(http.StatusOK)
 }
