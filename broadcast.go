@@ -29,7 +29,10 @@ func scanServer() {
 		for i := 1; i <= MAX_SERVER_NUM; i++ {
 			startAddr[2] = strconv.Itoa(i)
 			ipStr := strings.Join(startAddr, ".")
-			http.Post("http://"+ipStr+PORT+"/newServer", "application/json", reader)
+			_, err := http.Post("http://"+ipStr+PORT+"/newServer", "application/json", reader)
+			if err != nil {
+				log.Fatalf("%v", err)
+			}
 		}
 		time.Sleep(5 * time.Second)
 	}
