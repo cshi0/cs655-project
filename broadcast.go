@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"log"
 	"net"
+	"net/http"
 	"strconv"
 	"strings"
 	"time"
@@ -14,6 +17,22 @@ const BROADCAST_RECEIVE_PORT = ":8082"
 const MAX_SERVER_NUM = 100
 
 var broadcastIP string
+
+func scanServer() {
+	buf, err := json.Marshal(&NewServerReq{Addr: hostIP})
+	if err != nil {
+		log.Fatalf("%v", err)
+	}
+	reader := bytes.NewReader(buf)
+	for {
+		startAddr := []string{"10", "10", "0", "1"}
+		for i := 1; i <= MAX_SERVER_NUM; i++ {
+			startAddr[2] = strconv.Itoa(i)
+			ipStr := strings.Join(startAddr, ".")
+			http.Post("http://"+ipStr+PORT+"/newServer", "application/json", reader)
+		}
+	}
+}
 
 func broadcastHost() {
 	pc, err := net.ListenPacket("udp4", BROADCAST_SEND_PORT)

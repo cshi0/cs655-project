@@ -40,8 +40,7 @@ func main() {
 	log.Printf("%v", availability)
 	log.Printf("%v", broadcastIP)
 
-	go receiveBroadcast()
-	go broadcastHost()
+	go scanServer()
 
 	enumerated3CharsList = enumerate3Chars()
 
