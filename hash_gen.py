@@ -16,5 +16,5 @@ print(strs)
 
 for s in strs:
   h = hashlib.md5(s.encode())
-  print("curl -X POST http://localhost:8080/crackTask --header \"Content-Type: application/json\" --data '{\"ToUnhash\": \"" +h.hexdigest()+ "\"}'")
-  requests.post('http://localhost:8080/crackTask', {"ToUnhash": h.hexdigest()})
+  print("curl http://localhost:8080/crackTask -X POST --header \"Content-Type: application/json\" --data '{\"ToUnhash\":\"" +h.hexdigest()+ "\"}'")
+  requests.post('http://localhost:8080/crackTask', json={"ToUnhash":h.hexdigest()})
