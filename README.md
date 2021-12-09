@@ -34,5 +34,5 @@ It will generate 10 random 5-character strings, and send 10 crackTask requests t
 curl -X GET http://localhost:8080/metrics
 ```
 
-### Publicly router
+### Publicly routable
 It is recommended to run requests on localhost which makes it easier to use the script and makes it more stable, but all servers are publicly routable. For example, node-1 in my slice has an IP of 143.215.216.204, which can be called.
